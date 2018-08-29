@@ -1,4 +1,4 @@
-package hellocucumber;
+package sainsburys;
 
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
