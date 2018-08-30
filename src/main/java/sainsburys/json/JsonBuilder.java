@@ -1,8 +1,7 @@
 package sainsburys.json;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.jsoup.Jsoup;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -10,6 +9,15 @@ import sainsburys.utils.Constants;
 import sainsburys.utils.WebPageReader;
 
 public class JsonBuilder {
+    private double priceTotal;
+
+    /**
+     * Simple constructor to initialise variables
+     */
+    public JsonBuilder(){
+        priceTotal = 0;
+    }
+
 
     /**
      * The public facing method of the class
@@ -18,18 +26,28 @@ public class JsonBuilder {
      * @return returns the full json object of the data on the page
      */
     public String getFullJsonData(String url){
+        priceTotal = 0;
+
         WebPageReader webPageReader = new WebPageReader();
         Document document = webPageReader.getDocument(url);
         Elements productDivElements = document.getElementsByClass("productInfo");
 
-        String fullJson = "{ \n\t\"results\": [\n";
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+
         for (Element element : productDivElements){
             Element relHref = element.select("a").first();
-            fullJson += getProductJsonData(relHref.attr("href"));
+            jsonArray.put(getProductJsonData(relHref.attr("href")));
         }
 
-        fullJson += "\n],\n";
-        return fullJson;
+        JSONObject totalObject = new JSONObject();
+        totalObject.put("gross", priceTotal);
+        totalObject.put("vat", priceTotal * 0.2);
+
+        jsonObject.put("results", jsonArray);
+        jsonObject.put("total", totalObject);
+
+        return jsonObject.toString(2);
     }
 
     /**
@@ -37,15 +55,18 @@ public class JsonBuilder {
      * @param url url of product page to scrape
      * @return returns json object with product data
      */
-    private String getProductJsonData(String url){
+    private JSONObject getProductJsonData(String url){
         WebPageReader webPageReader = new WebPageReader();
         Document document = webPageReader.getDocument(Constants.BASE_URL + url);
 
         //using first might not be the best way to do this
         //if the website changes then it will return a different value
         //however if the website changes then the class names might change too
+
+        JSONObject jso = new JSONObject();
         String title = document.select("h1").first().text();
         String price = document.getElementsByClass("pricePerUnit").first().text().split("/")[0].substring(2);
+        priceTotal += Double.parseDouble(price);
         String description = getFirstNonNullTextFromElements(document.getElementsByClass("productText").first().select("p"));
         String calories;
 
@@ -55,32 +76,15 @@ public class JsonBuilder {
             calories = null;
         }
 
-
-        String jsonToReturn = "\t{ \n" + convertToJsonLinePair("title", title, true) + ", \n";
+        jso.put("title", title);
         if (calories != null){
-            jsonToReturn += convertToJsonLinePair("kcal_per_100g", calories, false) + ", \n";
+            jso.put("kcal_per_100g", calories);
         }
-        jsonToReturn += convertToJsonLinePair("unit_price", price, false) + ", \n";
-        jsonToReturn += convertToJsonLinePair("description", description, true) + "\n";
-        jsonToReturn += "\t} \n";
+        jso.put("unit_price", price);
+        jso.put("description", description);
 
-        return jsonToReturn;
-    }
 
-    /**
-     * Private method, converts a title and it's value into a line for a json object
-     * @param column title of the value in the object
-     * @param value the value itself
-     * @param isString whether or not the value is a string and needs quotes
-     * @return returns a line for a json object
-     */
-    private String convertToJsonLinePair(String column, String value, boolean isString){
-        if (isString){
-            return "\t\t\"" + column + "\": \"" + value + "\"";
-        } else {
-            return "\t\t\"" + column + "\": " + value;
-        }
-
+        return jso;
     }
 
     /**
