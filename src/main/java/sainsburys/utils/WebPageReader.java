@@ -10,6 +10,11 @@ import org.jsoup.nodes.Document;
 
 public class WebPageReader {
 
+    /**
+     * connects to the given url and returns the html on the page as a string
+     * @param urlString webpage to scrape
+     * @return html of page as string
+     */
     public String getHtmlFromUrl(String urlString){
 
         StringBuffer buffer = new StringBuffer();
@@ -27,7 +32,7 @@ public class WebPageReader {
             System.err.println("Exception thrown trying to reach URL");
             return null;
         } catch (IOException e){
-            System.err.println("Excpetion thrown opening url stream");
+            System.err.println("Exception thrown opening url stream");
             return null;
         }
 
@@ -35,6 +40,11 @@ public class WebPageReader {
     }
 
 
+    /**
+     * gets a Jsoup document for the given url in order to do parsing of the html
+     * @param urlString url to scrape
+     * @return Jsoup Document ready to parse
+     */
     public Document getDocument(String urlString){
         return Jsoup.parse(getHtmlFromUrl(urlString));
     }

@@ -11,6 +11,12 @@ import sainsburys.utils.WebPageReader;
 
 public class JsonBuilder {
 
+    /**
+     * The public facing method of the class
+     * gets the full json data scraped from the given URL
+     * @param url url to scrape
+     * @return returns the full json object of the data on the page
+     */
     public String getFullJsonData(String url){
         WebPageReader webPageReader = new WebPageReader();
         Document document = webPageReader.getDocument(url);
@@ -26,6 +32,11 @@ public class JsonBuilder {
         return fullJson;
     }
 
+    /**
+     * private method to get json data for a single product
+     * @param url url of product page to scrape
+     * @return returns json object with product data
+     */
     private String getProductJsonData(String url){
         WebPageReader webPageReader = new WebPageReader();
         Document document = webPageReader.getDocument(Constants.BASE_URL + url);
@@ -44,7 +55,7 @@ public class JsonBuilder {
             calories = null;
         }
 
-        
+
         String jsonToReturn = "\t{ \n" + convertToJsonLinePair("title", title, true) + ", \n";
         if (calories != null){
             jsonToReturn += convertToJsonLinePair("kcal_per_100g", calories, false) + ", \n";
@@ -56,6 +67,13 @@ public class JsonBuilder {
         return jsonToReturn;
     }
 
+    /**
+     * Private method, converts a title and it's value into a line for a json object
+     * @param column title of the value in the object
+     * @param value the value itself
+     * @param isString whether or not the value is a string and needs quotes
+     * @return returns a line for a json object
+     */
     private String convertToJsonLinePair(String column, String value, boolean isString){
         if (isString){
             return "\t\t\"" + column + "\": \"" + value + "\"";
@@ -65,13 +83,18 @@ public class JsonBuilder {
 
     }
 
+    /**
+     * finds the first non-empty text value from within a set of elements
+     * @param elements elements to search
+     * @return a string with the first non-empty text part of an element
+     *          will return null if no elements have text
+     */
     private String getFirstNonNullTextFromElements(Elements elements){
         for (Element e: elements) {
             if (!e.text().equals("")){
                 return e.text();
             }
         }
-
         return null;
     }
 }
