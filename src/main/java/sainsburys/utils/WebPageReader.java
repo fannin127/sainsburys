@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.StringBuffer;
 import java.net.MalformedURLException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 public class WebPageReader {
 
     public String getHtmlFromUrl(String urlString){
@@ -31,6 +34,10 @@ public class WebPageReader {
         return buffer.toString();
     }
 
+
+    public Document getDocument(String urlString){
+        return Jsoup.parse(getHtmlFromUrl(urlString));
+    }
 
 
 

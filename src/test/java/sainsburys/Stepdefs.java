@@ -5,7 +5,6 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import sainsburys.json.JsonBuilder;
-import sainsburys.json.jsonBuilder;
 import sainsburys.utils.Constants;
 import sainsburys.utils.WebPageReader;
 import cucumber.api.java.en.Then;
@@ -32,7 +31,7 @@ public void beforeTest(Scenario scenario){
     public void i_load_the_page()  {
         WebPageReader reader = new WebPageReader();
         scenario.write("Loading sainsburys webpage");
-        rawData = reader.getHtmlFromUrl(Constants.CONNECTION_URL);
+        rawData = reader.getHtmlFromUrl(Constants.BERRIES_URL);
         assertTrue(rawData != null);
     }
 
