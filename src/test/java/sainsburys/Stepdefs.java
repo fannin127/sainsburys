@@ -4,6 +4,8 @@ import cucumber.api.Scenario;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
+import gherkin.deps.com.google.gson.JsonObject;
+import org.json.JSONObject;
 import sainsburys.json.JsonBuilder;
 import sainsburys.utils.Constants;
 import sainsburys.utils.WebPageReader;
@@ -14,7 +16,7 @@ public class Stepdefs {
 
 private Scenario scenario;
 private String rawData;
-private String jsonResult;
+private JSONObject jsonResult;
 
 @Before
 public void beforeTest(Scenario scenario){
@@ -38,7 +40,7 @@ public void beforeTest(Scenario scenario){
     @When("^scrape the data$")
     public void scrape_the_data() {
         JsonBuilder jsonBuilder = new JsonBuilder();
-        jsonResult = jsonBuilder.getFullJsonData(rawData);
+        jsonResult = jsonBuilder.getFullJsonData(Constants.BERRIES_URL);
 
         assertTrue(jsonResult != null);
     }
@@ -47,11 +49,14 @@ public void beforeTest(Scenario scenario){
     public void the_data_is_validated(){
         String expectedJsonResult = null;
 
-        assertEquals(expectedJsonResult, jsonResult);
+        JsonVerifier jsonVerifier = new JsonVerifier(jsonResult);
+
+        assertTrue(jsonVerifier.verifyTotal(39.5, 7.9));
+
     }   
 
     @Then("^the website has been scraped correctly$")
     public void the_website_has_been_scraped_correctly(){
-        scenario.write("All tests passed");
+        
     }
 }

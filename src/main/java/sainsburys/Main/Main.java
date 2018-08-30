@@ -9,7 +9,7 @@ public class Main {
   public static void main(String[] args){
     JsonBuilder js = new JsonBuilder();
 
-    System.out.println(js.getFullJsonData(Constants.BERRIES_URL));
+    System.out.println(js.getFullJsonData(Constants.BERRIES_URL).toString(2));
 
   }
 }

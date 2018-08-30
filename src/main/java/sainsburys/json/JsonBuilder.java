@@ -25,7 +25,7 @@ public class JsonBuilder {
      * @param url url to scrape
      * @return returns the full json object of the data on the page
      */
-    public String getFullJsonData(String url){
+    public JSONObject getFullJsonData(String url){
         priceTotal = 0;
 
         WebPageReader webPageReader = new WebPageReader();
@@ -47,7 +47,7 @@ public class JsonBuilder {
         jsonObject.put("results", jsonArray);
         jsonObject.put("total", totalObject);
 
-        return jsonObject.toString(2);
+        return jsonObject;
     }
 
     /**
