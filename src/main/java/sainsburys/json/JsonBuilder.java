@@ -70,10 +70,11 @@ public class JsonBuilder {
         String description = getFirstNonNullTextFromElements(document.getElementsByClass("productText").first().select("p"));
         String calories;
 
+
         try {
-            calories = document.getElementsByClass("nutritionLevel1").first().text().split("kcal")[0];
-        } catch (NullPointerException e){
-            calories = null;
+          calories = document.select("tr:contains(kcal)").get(0).select("td").get(0).text();
+        } catch (Exception e2){
+          calories = null;
         }
 
         jso.put("title", title);
