@@ -5,6 +5,7 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import gherkin.deps.com.google.gson.JsonObject;
+import java.util.ArrayList;
 import org.json.JSONObject;
 import sainsburys.json.JsonBuilder;
 import sainsburys.utils.Constants;
@@ -51,12 +52,51 @@ public void beforeTest(Scenario scenario){
 
         JsonVerifier jsonVerifier = new JsonVerifier(jsonResult);
 
+
+
+
         assertTrue(jsonVerifier.verifyTotal(39.5, 7.9));
 
-    }   
+        assertTrueWithScenarioPrinting(jsonVerifier.verifyPriceFields(),
+            "All objects have a price field", "Objects are missing price fields");
+
+        assertTrueWithScenarioPrinting(jsonVerifier.verifyDescriptionFields(),
+            "All objects have a single line description field", "There are missing/unformated description fields");
+
+        assertTrueWithScenarioPrinting(jsonVerifier.verifyTitleFields(),
+            "All objects have a title field", "Objects are missing title fields");
+
+        assertTrueWithScenarioPrinting(jsonVerifier.verifyCalories(getProductsWithoutCalories()),
+            "All objects that should have calorie fields do", "Objects are missing calorie fields");
+
+    }
+
+    private void assertTrueWithScenarioPrinting(boolean condition, String messageTrue,
+        String messageFalse){
+        if (condition){
+            scenario.write(messageTrue);
+            assertTrue(true);
+        } else {
+            scenario.write(messageFalse);
+            assertTrue(false);
+        }
+
+    }
+
+    private ArrayList<String> getProductsWithoutCalories(){
+        ArrayList<String> namesOfProductsWithoutCalories = new ArrayList<String>();
+
+        namesOfProductsWithoutCalories.add("Sainsbury's Mixed Berries 300g");
+        namesOfProductsWithoutCalories.add("Sainsbury's Mixed Berry Twin Pack 200g");
+        namesOfProductsWithoutCalories.add("Sainsbury's Blackcurrants 150g");
+        namesOfProductsWithoutCalories.add("Sainsbury's British Cherry & Strawberry Pack 600g");
+
+        return namesOfProductsWithoutCalories;
+
+    }
 
     @Then("^the website has been scraped correctly$")
     public void the_website_has_been_scraped_correctly(){
-        
+
     }
 }
