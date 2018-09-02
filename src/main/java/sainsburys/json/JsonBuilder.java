@@ -44,8 +44,8 @@ public class JsonBuilder {
         }
 
         JSONObject totalObject = new JSONObject();
-        totalObject.put("gross", priceTotal);
-        totalObject.put("vat", priceTotal * 0.2);
+        totalObject.put("gross", unitPriceToTwoDecimalPlaces(Double.toString(priceTotal)));
+        totalObject.put("vat", unitPriceToTwoDecimalPlaces(Double.toString(priceTotal * 0.2)));
 
         jsonObject.put("results", jsonArray);
         jsonObject.put("total", totalObject);
@@ -53,6 +53,12 @@ public class JsonBuilder {
         return jsonObject;
     }
 
+    private String unitPriceToTwoDecimalPlaces(String unitPrice){
+      if (!(unitPrice.split("\\.")[1].length() == 2)){
+        unitPrice += 0;
+      }
+      return unitPrice;
+    }
     /**
      * private method to get json data for a single product
      * @param url url of product page to scrape
@@ -68,7 +74,8 @@ public class JsonBuilder {
 
         JSONObject jso = new JSONObject();
         String title = document.select("h1").first().text();
-        String price = document.getElementsByClass("pricePerUnit").first().text().split("/")[0].substring(2);
+        String price = unitPriceToTwoDecimalPlaces(document.getElementsByClass(
+            "pricePerUnit").first().text().split("/")[0].substring(2));
         priceTotal += Double.parseDouble(price);
         String description = getFirstNonNullTextFromElements(document.getElementsByClass("productText").first().select("p"));
         String calories;

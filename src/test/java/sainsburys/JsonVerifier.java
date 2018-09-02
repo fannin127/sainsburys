@@ -28,7 +28,13 @@ public class JsonVerifier {
     JSONObject totalObject = jsonObject.getJSONObject("total");
 
     return totalObject.getDouble("gross") == expectedGross &&
-        totalObject.getDouble("vat") == expectedVat;
+        totalObject.getDouble("vat") == expectedVat &&
+        checkUnitPriceIsToTwoDecimalPlaces(totalObject.getString("gross")) &&
+        checkUnitPriceIsToTwoDecimalPlaces(totalObject.getString("vat"));
+  }
+
+  private boolean checkUnitPriceIsToTwoDecimalPlaces(String price){
+    return price.split("\\.")[1].length() == 2;
   }
 
   /**
