@@ -18,6 +18,7 @@ public class Stepdefs {
 private Scenario scenario;
 private String rawData;
 private JSONObject jsonResult;
+private JsonVerifier jsonVerifier;
 
 @Before
 public void beforeTest(Scenario scenario){
@@ -44,43 +45,33 @@ public void beforeTest(Scenario scenario){
         jsonResult = jsonBuilder.getFullJsonData(Constants.BERRIES_URL);
 
         assertTrue(jsonResult != null);
+
+        jsonVerifier = new JsonVerifier(jsonResult);
     }
 
-    @When("^the data is validated$")
-    public void the_data_is_validated(){
-        String expectedJsonResult = null;
-
-        JsonVerifier jsonVerifier = new JsonVerifier(jsonResult);
-
-
-
-
+    @When("^the correct total is displayed$")
+    public void the_correct_total_is_displayed() {
         assertTrue(jsonVerifier.verifyTotal(39.5, 7.9));
-
-        assertTrueWithScenarioPrinting(jsonVerifier.verifyPriceFields(),
-            "All objects have a price field", "Objects are missing price fields");
-
-        assertTrueWithScenarioPrinting(jsonVerifier.verifyDescriptionFields(),
-            "All objects have a single line description field", "There are missing/unformated description fields");
-
-        assertTrueWithScenarioPrinting(jsonVerifier.verifyTitleFields(),
-            "All objects have a title field", "Objects are missing title fields");
-
-        assertTrueWithScenarioPrinting(jsonVerifier.verifyCalories(getProductsWithoutCalories()),
-            "All objects that should have calorie fields do", "Objects are missing calorie fields");
-
     }
 
-    private void assertTrueWithScenarioPrinting(boolean condition, String messageTrue,
-        String messageFalse){
-        if (condition){
-            scenario.write(messageTrue);
-            assertTrue(true);
-        } else {
-            scenario.write(messageFalse);
-            assertTrue(false);
-        }
+    @When("^the products all have a title$")
+    public void the_products_all_have_a_title() {
+        assertTrue(jsonVerifier.verifyTitleFields());
+    }
 
+    @When("^the products all have a single line description$")
+    public void the_products_all_have_a_single_line_description() {
+        assertTrue(jsonVerifier.verifyDescriptionFields());
+    }
+
+    @When("^the products all have a unit price field$")
+    public void the_products_all_have_a_unit_price_field() {
+        assertTrue(jsonVerifier.verifyPriceFields());
+    }
+
+    @When("^the products that should have calorie information, do$")
+    public void the_products_that_should_have_calorie_information_do() {
+        assertTrue(jsonVerifier.verifyCalories(getProductsWithoutCalories()));
     }
 
     private ArrayList<String> getProductsWithoutCalories(){
