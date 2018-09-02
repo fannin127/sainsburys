@@ -13,44 +13,44 @@ import org.jsoup.nodes.Document;
  */
 public class WebPageReader {
 
-    /**
-     * connects to the given url and returns the html on the page as a string
-     * @param urlString webpage to scrape
-     * @return html of page as string
-     */
-    public String getHtmlFromUrl(String urlString){
+  /**
+   * connects to the given url and returns the html on the page as a string
+   *
+   * @param urlString webpage to scrape
+   * @return html of page as string
+   */
+  public String getHtmlFromUrl(String urlString) {
 
-        StringBuffer buffer = new StringBuffer();
+    StringBuffer buffer = new StringBuffer();
 
-        try {
-            URL url = new URL(urlString);
-            InputStream is = url.openStream();
-            int ptr = 0;
+    try {
+      URL url = new URL(urlString);
+      InputStream is = url.openStream();
+      int ptr = 0;
 
-            while ((ptr = is.read()) != -1) {
-                buffer.append((char)ptr);
-            }   
-        } catch (MalformedURLException e){
-            System.err.println("Exception thrown trying to reach URL");
-            return null;
-        } catch (IOException e){
-            System.err.println("Exception thrown opening url stream");
-            return null;
-        }
-
-        return buffer.toString();
+      while ((ptr = is.read()) != -1) {
+        buffer.append((char) ptr);
+      }
+    } catch (MalformedURLException e) {
+      System.err.println("Exception thrown trying to reach URL");
+      return null;
+    } catch (IOException e) {
+      System.err.println("Exception thrown opening url stream");
+      return null;
     }
 
-
-    /**
-     * gets a Jsoup document for the given url in order to do parsing of the html
-     * @param urlString url to scrape
-     * @return Jsoup Document ready to parse
-     */
-    public Document getDocument(String urlString){
-        return Jsoup.parse(getHtmlFromUrl(urlString));
-    }
+    return buffer.toString();
+  }
 
 
+  /**
+   * gets a Jsoup document for the given url in order to do parsing of the html
+   *
+   * @param urlString url to scrape
+   * @return Jsoup Document ready to parse
+   */
+  public Document getDocument(String urlString) {
+    return Jsoup.parse(getHtmlFromUrl(urlString));
+  }
 
 }

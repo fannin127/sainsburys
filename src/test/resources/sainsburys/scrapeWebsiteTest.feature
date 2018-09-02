@@ -1,5 +1,5 @@
-Feature: Scrape the sainsburys website
-  Check the results from scraping the sainsburys website for Berries, Cherries, Currants
+Feature: Scrape the Sainsbury's website
+  Check the results from scraping the Sainsbury's website for Berries, Cherries, Currants
 
   Scenario: Scrape the website
     Given I can connect to the internet
