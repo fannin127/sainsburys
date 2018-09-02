@@ -1,7 +1,5 @@
 package sainsburys;
 
-
-import gherkin.deps.com.google.gson.JsonObject;
 import java.util.ArrayList;
 import org.json.JSONObject;
 

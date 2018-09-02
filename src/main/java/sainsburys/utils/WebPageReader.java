@@ -8,6 +8,9 @@ import java.net.MalformedURLException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+/**
+ * Class to connect to a webpage and download the HTML data
+ */
 public class WebPageReader {
 
     /**
@@ -24,7 +27,6 @@ public class WebPageReader {
             InputStream is = url.openStream();
             int ptr = 0;
 
-           
             while ((ptr = is.read()) != -1) {
                 buffer.append((char)ptr);
             }   

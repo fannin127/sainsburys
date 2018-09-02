@@ -4,7 +4,6 @@ import cucumber.api.Scenario;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
-import gherkin.deps.com.google.gson.JsonObject;
 import java.util.ArrayList;
 import org.json.JSONObject;
 import sainsburys.json.JsonBuilder;
@@ -13,6 +12,9 @@ import sainsburys.utils.WebPageReader;
 import cucumber.api.java.en.Then;
 import static org.junit.Assert.*;
 
+/**
+ * Step definitions for the scrapeWebsite feature file
+ */
 public class Stepdefs {
 
 private Scenario scenario;

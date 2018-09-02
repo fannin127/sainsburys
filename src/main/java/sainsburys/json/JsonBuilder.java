@@ -8,6 +8,9 @@ import org.jsoup.select.Elements;
 import sainsburys.utils.Constants;
 import sainsburys.utils.WebPageReader;
 
+/**
+ * Used to construct the product data in JSON format from the Sainsbury's website
+ */
 public class JsonBuilder {
     private double priceTotal;
 
